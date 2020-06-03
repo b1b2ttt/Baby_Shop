@@ -1,4 +1,4 @@
-#基于SpringBoot秒杀模块
+# 基于SpringBoot秒杀模块
 ## 开发工具
 idea 2020.1
 
