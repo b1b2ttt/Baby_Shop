@@ -1,0 +1,42 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/babytun?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
+    username: root
+    password: root1234
+  redis:
+    database: 3
+    host: 127.0.0.1
+    port: 6379
+    jedis:
+      pool:
+        max-active: 100
+        max-idle: 100
+        min-idle: 10
+        max-wait: 1000ms
+  freemarker:
+    #charset: UTF-8
+    #content-type: text/html; charset=utf-8
+    settings:
+      classic_compatible: true
+  jackson:
+    date-format: yyyy-MM-dd
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    listener:
+      simple:
+        #定义消费者同时处理十个消息
+        prefetch: 10
+        #消息手动确认
+        acknowledge-mode: manual
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
