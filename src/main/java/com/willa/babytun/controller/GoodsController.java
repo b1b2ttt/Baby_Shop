@@ -39,8 +39,8 @@ public class  GoodsController {
     // 在springboot ioc容器初始化的时候自动configuration对象就被实例化了
     @Resource
     private Configuration freemarkerConfig;
-    @GetMapping("/goods") //http://localhost/goods?gid=xxx
-    public ModelAndView showGoods(Long gid){
+    @GetMapping("/goods-{gid}.html") //http://localhost/goods?gid=xxx //.html伪静态化
+    public ModelAndView showGoods(@PathVariable("gid") Long gid){
         logger.info("port:" + port);
 
         ModelAndView mav = new ModelAndView("/goods");

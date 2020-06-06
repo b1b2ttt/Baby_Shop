@@ -133,3 +133,67 @@ fail_timeout代表单次链接超时时间
 - spring session提供了管理用户session的API实现
 - spring session可用于spring与springboot环境
 - springboot提供了对应的starter集成
+
+## 9.Nginx 静态缓存与资源压缩
+
+###  9.1 Tomcat中的静态资源
+css, js 
+
+### 9.2 利用静态缓存降低Tomcat压力
+![](https://github.com/b1b2ttt/images/blob/master/miaosha_9.2.png?raw=true)
+
+在nginx.conf中加入:
+
+    #代表了临时文件夹
+    proxy_temp_path d:/nginx-temp;
+    #设置缓存目录
+    #levels代表采用1：2也就是两级目录保存缓存文件（静态资源css, js), 同时文件名进行了MD5编码
+    #keys_zone定义缓存的名称以及内存的使用，名称为babytun-cache,在内存中开辟100M交换空间，这100M是高频读写空间
+    #inactive = 7d 如果某个缓存文件超过7天没有被访问，则删除
+    #max_size代表设置文件夹最大不能超过20g,超过后会自动将访问频度（命中率）最低的缓存文件删除
+    proxy_cache_path d:/nginx-cache levels= 1:2 keys_zone=babytun-cache:100m inactive = 7d max_size=20g;
+	
+	在server{ }中加入
+	#静态资源缓存
+	#利用正则表达式匹配URL，匹配成功的则执行内部逻辑
+	# ~*不区分大小写
+	location ~* \.(gif|jpg|css|png|woff|html)(.*) {
+		proxy_pass http://babytun;
+		proxy_set_header Host $host; 
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_cache babytun-cache;
+		#如果静态资源响应状态码为200， 302（暂时性重定向)时 资源缓存文件有效期1天
+		proxy_cache_valid 200 302 24h;
+		#301永久性重定向
+		proxy_cache_valid 301 24h;
+		#其他情况
+		proxy_cache_valid any 5m;
+		#浏览器的缓存时间
+		expire 90d;
+	}
+
+nginx优先级是先匹配正则
+nginx也可以缓存html
+
+### 9.3 资源压缩
+利用浏览器支持的Gzip压缩，nginx打包压缩并传输css, js等静态资源，可将带宽压力降低30% --70%。
+![](https://github.com/b1b2ttt/images/blob/master/miaosha_9.3.png?raw=true)
+
+ 在nginx.conf中配置gzip:
+ ```
+    #开启nginx Gzip
+    gzip on;
+    #只有超过1k的文件才压缩
+    gzip_min_length 1k;
+    #说明哪些类型的文件在传输前进行压缩
+	#image/jpeg类似的图片文件本身就已经是经过压缩的文件，对其Gzip压缩后效果并不明显
+	#gzip对文本文件的效果极好
+    gzip_types text/plain application/javascript text/css application/x-javascript；
+	#低版本IE禁用Gzip压缩
+	gzip_disable "MSIE [1-6]\.";
+	#压缩使用的缓存，每个内存页为4K，申请32倍
+	gzip_buffers 32 4k；
+	#设置压缩级别 1-9 越大压缩比越高，但浪费的cpu资源也越多
+	#建议1-4即可
+	gzio_comp_level 1;
+```

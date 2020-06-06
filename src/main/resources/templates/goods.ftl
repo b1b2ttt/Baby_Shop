@@ -25,17 +25,17 @@
 <body style="background-color: #eeeeee">
 <ul class="layui-nav layui-bg-green">
     <div class="layui-container">
-        <li class="layui-nav-item" style="background-color: orange;margin-left: -14px"><a href="javascript:void(0)" style="font-size: 18px;color: white">宝宝团商城</a></li>
-        <li class="layui-nav-item layui-this"><a href="">宝宝团</a></li>
-        <li class="layui-nav-item"><a href="">全球购</a></li>
-        <li class="layui-nav-item"><a href="">旗舰店</a></li>
-        <li class="layui-nav-item"><a href="">宝宝社区</a></li>
+        <li class="layui-nav-item" style="background-color: orange;margin-left: -14px"><a href="javascript:void(0)" style="font-size: 18px;color: white">baby shop</a></li>
+        <li class="layui-nav-item layui-this"><a href="">baby shop</a></li>
+        <li class="layui-nav-item"><a href="">shop worldwide</a></li>
+        <li class="layui-nav-item"><a href="">prime shop</a></li>
+        <li class="layui-nav-item"><a href="">baby community</a></li>
     </div>
 </ul>
 
 <div class="layui-container" style="padding: 10px;border: 1px solid #ccc;background-color:white">
     <span class="layui-breadcrumb" style="visibility: visible;">
-      <a href="/">首页</a><span lay-separator="">/</span>
+      <a href="/">Home</a><span lay-separator="">/</span>
       <a><cite>${goods.title}</cite></a>
     </span>
     <div class="layui-row" style="padding-top: 10px">
@@ -61,15 +61,15 @@
                 </li>
 
                 <li style="color: darkgrey">
-                    <span>宝宝团价：</span><span style="font-size: 26px;color: orange;font-weight: bold">${goods.currentPrice?string('¥0.00')}</span><span
+                    <span>Price：</span><span style="font-size: 26px;color: orange;font-weight: bold">${goods.currentPrice?string('¥0.00')}</span><span
                         style="text-decoration: line-through">¥${goods.originalCost?string('¥0.00')}</span>
                 </li>
 
                 <li>
-                    <span>运费： 6.0元 <#if goods.isFreeDelivery == 1>满58.0元包邮</#if></span>
+                    <span>Delivery Fee： 6.0 <#if goods.isFreeDelivery == 1>Free Shipping over 58</#if></span>
                 </li>
                 <li>
-                    数量：
+                    Quantity：
                     <div class="layui-btn-group">
                         <button class="layui-btn layui-btn-primary layui-btn-sm">
                             <span style="font-size: 18px">-</span></button>
@@ -79,8 +79,8 @@
                     </div>
                 </li>
                 <li>
-                    <button class="layui-btn layui-btn-radius layui-btn-normal">立即购买</button>
-                    <button class="layui-btn layui-btn-radius layui-btn-danger">加入购物车</button>
+                    <button class="layui-btn layui-btn-radius layui-btn-normal">Buy Now</button>
+                    <button class="layui-btn layui-btn-radius layui-btn-danger">Add to Cart</button>
                 </li>
             </ul>
         </div>
@@ -89,8 +89,8 @@
     <div class="layui-row">
         <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
             <ul class="layui-tab-title">
-                <li class="layui-this">产品详情</li>
-                <li>产品参数</li>
+                <li class="layui-this">Product Detail</li>
+                <li>Product Parameter</li>
                 <li>Comments</li>
             </ul>
             <div class="layui-tab-content">
@@ -132,7 +132,7 @@
         $.getJSON("/evaluate/${goods.goodsId?string('0')}", function (json) {
             for(i = 0; i < json.length; i++) {
                 var eva = json[i];
-                $("#divEvaluate").append("<h2>" + eva.createTime  + " 宝妈评价道：" + eva.content + "</h2><hr>");
+                $("#divEvaluate").append("<h2>" + eva.createTime  + " Comments：" + eva.content + "</h2><hr>");
             }
         })
 
