@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -42,7 +43,7 @@ public class  GoodsController {
     public ModelAndView showGoods(Long gid){
         logger.info("port:" + port);
 
-        ModelAndView mav = new ModelAndView("/goods1");
+        ModelAndView mav = new ModelAndView("/goods");
         Goods goods = goodsService.getGoods(gid);
         mav.addObject("goods", goods);
         mav.addObject("covers", goodsService.findCovers(gid));
@@ -93,5 +94,24 @@ public class  GoodsController {
     @ResponseBody
     public List<Evaluate> findEvaluates(@PathVariable("gid") Long goodsId) {
         return goodsService.findEvaluates(goodsId);
+    }
+
+    @GetMapping("/login")
+    @ResponseBody
+    public String longin(String u, WebRequest request) {
+        request.setAttribute("user", u, WebRequest.SCOPE_REQUEST);
+        return "port:" + port + ",login success";
+
+    }
+
+    @GetMapping("/check")
+    @ResponseBody
+    public String checkUser(WebRequest request) {
+        String user = (String) request.getAttribute("user", WebRequest.SCOPE_REQUEST);
+        if(user != null) {
+            return "port:" + port + ",user=" + user;
+        }else {
+            return "port:" + port + ", redirect to login!";
+        }
     }
 }

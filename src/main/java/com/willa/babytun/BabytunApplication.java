@@ -11,11 +11,13 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.http.codec.json.Jackson2CodecSupport;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 @SpringBootApplication
 @MapperScan("com.willa.babytun") //mybatis在SpringBoot启动的时候自动扫描mybatis实现的接口
 //@EnableCaching //开启声明书缓存，利用注解来控制缓存的读写
 @EnableScheduling //自动任务调度
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 3600) //redis session启用, 括号里面是设置session存储时长，单位是ms
 public class BabytunApplication {
 	//修改默认的redisTemplate持久化方式
 	@Bean
